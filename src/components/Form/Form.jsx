@@ -1,10 +1,13 @@
 import React from 'react';
 import './Form.css';
 import Field from './Field.jsx';
+import logo from './assets/bond_approve.jpg'; // relative path to image
 
 export default class Form extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = { validUser: false };
 
     this.inputFirstname = React.createRef();
     this.inputLastname = React.createRef();
@@ -14,9 +17,13 @@ export default class Form extends React.Component {
   submitHandler = e => {
     e.preventDefault();
 
-    this.inputFirstname.current.check();
-    this.inputLastname.current.check();
-    this.inputPassword.current.check();
+    let firstnameValid = this.inputFirstname.current.checkOnSubmit();
+    let lastnameValid = this.inputLastname.current.checkOnSubmit();
+    let passwordValid = this.inputPassword.current.checkOnSubmit();
+
+    this.setState({
+      validUser: firstnameValid && lastnameValid && passwordValid
+    });
   };
 
   keyPressHandler = e => {
@@ -28,6 +35,10 @@ export default class Form extends React.Component {
   };
 
   render() {
+    if (this.state.validUser) {
+      return <img src={logo} alt="bond" className="t-bond-image" />;
+    }
+
     return (
       <div className="app-container">
         <form

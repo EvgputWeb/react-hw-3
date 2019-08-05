@@ -8,30 +8,56 @@ export default class Field extends React.Component {
     errorMessage: ''
   };
 
-  errorMsgEmptyField = {
+  _validUser = {
+    firstname: 'james',
+    lastname: 'bond',
+    password: '007'
+  };
+
+  _errorMsgEmptyField = {
     firstname: 'Нужно указать имя',
     lastname: 'Нужно указать фамилию',
     password: 'Нужно указать пароль'
   };
 
+  _errorMsgWrongValue = {
+    firstname: 'Имя указано не верно',
+    lastname: 'Фамилия указана не верно',
+    password: 'Пароль указан не верно'
+  };
+
   _currentText = '';
 
   check = () => {
-    console.log('check!');
+    //console.log('check!');
     let errMsg = '';
     if (this._currentText === '') {
-      errMsg = this.errorMsgEmptyField[this.props.name];
+      errMsg = this._errorMsgEmptyField[this.props.name];
     }
     this.setState({ text: this._currentText, errorMessage: errMsg });
+    return errMsg === '';
+  };
+
+  checkOnSubmit = () => {
+    //console.log('checkOnSubmit!');
+    if (!this.check()) {
+      return false;
+    }
+    let errMsg = '';
+    if (this._currentText !== this._validUser[this.props.name]) {
+      errMsg = this._errorMsgWrongValue[this.props.name];
+    }
+    this.setState({ errorMessage: errMsg });
+    return errMsg === '';
   };
 
   clearError = () => {
-    console.log('clearError');
+    //console.log('clearError');
     this.setState({ errorMessage: '' });
   };
 
   inputChangeHandler = e => {
-    console.log('onChange event');
+    //console.log('onChange event');
     this._currentText = e.target.value.trim();
     this.check();
   };
